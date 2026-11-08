@@ -1,0 +1,423 @@
+/* ============================================================
+   外服法务通 · 原型自定义样式
+   说明：Tailwind 负责基础布局，本文件只放 Tailwind 不方便表达的
+   字体、滚动条、动效、打印样式。
+   ============================================================ */
+
+:root {
+  --c-brand: #1d4ed8;
+  --c-brand-deep: #0f2c66;
+  --c-ink: #0f172a;
+  --c-muted: #64748b;
+  --c-line: #e5e8f0;
+  --c-bg: #f5f7fb;
+  --c-high: #dc2626;
+  --c-mid: #d97706;
+  --c-low: #16a34a;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB",
+    "Source Han Sans SC", "Noto Sans SC", system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  color: var(--c-ink);
+  background: var(--c-bg);
+}
+
+/* ---------- 滚动条 ---------- */
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 99px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+  background-clip: content-box;
+}
+
+/* ---------- 页面切换动画 ---------- */
+.page {
+  display: none;
+}
+.page.is-active {
+  display: block;
+  animation: pageIn 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 卡片入场：逐个上浮 */
+.rise {
+  animation: rise 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- 导航 ---------- */
+.nav-item {
+  position: relative;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+.nav-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 3px;
+  height: 0;
+  background: #60a5fa;
+  border-radius: 0 3px 3px 0;
+  transform: translateY(-50%);
+  transition: height 0.22s ease;
+}
+.nav-item.is-active::before {
+  height: 22px;
+}
+
+/* ---------- 通用小元件 ---------- */
+.chip {
+  border: 1px solid var(--c-line);
+  background: #fff;
+  transition: all 0.16s ease;
+  cursor: pointer;
+  user-select: none;
+}
+.chip:hover {
+  border-color: #a8bdf0;
+  color: var(--c-brand);
+}
+.chip.is-on {
+  background: #eef3ff;
+  border-color: #93b0f5;
+  color: var(--c-brand);
+  font-weight: 600;
+}
+/* 筛选片内的命中数量角标 */
+.chip-n {
+  display: inline-block;
+  min-width: 16px;
+  margin-left: 5px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #eef1f7;
+  color: #64748b;
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 15px;
+  text-align: center;
+}
+.chip.is-on .chip-n {
+  background: #2563eb;
+  color: #fff;
+}
+
+/* 类案卡片：展开态与命中关键词高亮 */
+.case-caret {
+  display: inline-flex;
+  transition: transform 0.22s ease;
+}
+.case-item.is-open .case-caret {
+  transform: rotate(180deg);
+}
+.case-item.is-open {
+  border-color: #b9cdf7;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.07);
+}
+mark.kw {
+  background: #fff3c4;
+  color: #92400e;
+  padding: 0 2px;
+  border-radius: 3px;
+}
+
+/* 轻提示 */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 42px;
+  transform: translateX(-50%) translateY(14px);
+  background: #0f172a;
+  color: #fff;
+  font-size: 13px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(16, 24, 40, 0.22);
+  opacity: 0;
+  transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 999;
+}
+.toast.is-in {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.stat-bar {
+  height: 8px;
+  border-radius: 99px;
+  background: #eef1f7;
+  overflow: hidden;
+}
+.stat-bar > i {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+/* ---------- 聊天 ---------- */
+.msg {
+  animation: msgIn 0.3s ease both;
+}
+@keyframes msgIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.typing i {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 3px;
+  border-radius: 99px;
+  background: #94a3b8;
+  animation: blink 1.2s infinite;
+}
+.typing i:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.typing i:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes blink {
+  0%,
+  60%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+/* ---------- 时间轴 ---------- */
+.timeline-line {
+  position: absolute;
+  left: 17px;
+  top: 10px;
+  bottom: 10px;
+  width: 2px;
+  background: linear-gradient(180deg, #bfdbfe, #e2e8f0);
+}
+.tl-dot {
+  position: relative;
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  border-radius: 99px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 2px solid var(--c-line);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--c-muted);
+  flex: 0 0 36px;
+}
+.tl-dot.is-done {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #fff;
+}
+.tl-dot.is-now {
+  border-color: #2563eb;
+  color: #2563eb;
+  box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.14);
+}
+
+/* ---------- 飞轮 ---------- */
+.flywheel {
+  animation: spin 26s linear infinite;
+  transform-origin: 50% 50%;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- 打印（导出报告 PDF） ---------- */
+@media print {
+  body {
+    background: #fff;
+  }
+  #sidebar,
+  #sidebar-overlay,
+  #topbar,
+  .no-print {
+    display: none !important;
+  }
+  #viewport {
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+  .page {
+    display: none !important;
+  }
+  #page-report.page {
+    display: block !important;
+  }
+  #report-paper {
+    box-shadow: none !important;
+    border: 0 !important;
+  }
+}
+
+
+/* ============================================================
+   移动端适配补充（桌面端表现与原型完全一致）
+   ============================================================ */
+@media (max-width: 640px) {
+  /* 顶栏标题在窄屏略缩，避免与右侧状态徽标挤压换行 */
+  #page-title { font-size: 15px; }
+  /* 抽屉导航在移动端可独立滚动 */
+  #sidebar { overflow-y: auto; }
+}
+
+
+/* ============================================================
+   落地页（index.html）专属样式
+   说明：动效、部件类名放这里，Tailwind 负责布局与配色
+   ============================================================ */
+
+/* ---------- Hero 预演卡浮动 ---------- */
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+.floaty { animation: floaty 5.5s ease-in-out infinite; }
+.floaty-late { animation: floaty 6.5s ease-in-out 1.2s infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .floaty, .floaty-late { animation: none; }
+}
+
+/* ---------- 滚动渐入 ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity .7s cubic-bezier(.2,.6,.2,1), transform .7s cubic-bezier(.2,.6,.2,1);
+}
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ---------- Hero 数据条 ---------- */
+#hero-stats .stat-num {
+  font-size: 30px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+#hero-stats .stat-unit { font-size: 13px; font-weight: 500; margin-left: 3px; color: rgba(255,255,255,.55); }
+#hero-stats .stat-label { font-size: 12px; color: rgba(255,255,255,.5); margin-top: 7px; }
+
+/* ---------- 功能区块小标签 ---------- */
+.sec-tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  color: #2563eb;
+  background: #eef3ff;
+  border: 1px solid #dbe6ff;
+  border-radius: 999px;
+  padding: 3px 11px;
+}
+
+/* ---------- mini demo 面板 ---------- */
+.demo-panel {
+  background: #f6f8fc;
+  border: 1px solid #e3e9f5;
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: 0 10px 30px -18px rgba(15,44,102,.25);
+}
+.demo-panel .demo-head {
+  font-size: 12px;
+  color: #64748b;
+  padding: 4px 6px 10px;
+}
+.demo-panel .demo-body {
+  background: #fff;
+  border: 1px solid #e5e8f0;
+  border-radius: 13px;
+  padding: 16px;
+}
+
+/* ---------- 报告纸面 ---------- */
+.report-paper { position: relative; }
+.report-paper::before {
+  content: '';
+  position: absolute;
+  inset: 6px -6px -6px 6px;
+  border-radius: 18px;
+  background: #eef1f8;
+  z-index: -1;
+}
+
+/* ---------- mini 聊天滚动 ---------- */
+#mini-chat-log { max-height: 300px; overflow-y: auto; scrollbar-width: thin; }

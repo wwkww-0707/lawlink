@@ -1,0 +1,11 @@
+# 依赖与构建工具缓存
+_build_tools/node_modules/
+node_modules/
+
+# 临时文件
+_verify/
+_stage/
+*.log
+
+# 本地打包产物（部署 zip 不入库，由构建流程生成）
+*.zip

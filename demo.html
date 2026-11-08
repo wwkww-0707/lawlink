@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>外服法务通 · 在线演示（工作台） | 交互原型</title>
+<meta name="description" content="外服法务通交互原型：智能法规查询、类案检索智库、7x24智能咨询、一键生成法律分析报告、专家直达闭环。" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231d4ed8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3l7 3v5.5c0 4.4-3 8-7 9.5-4-1.5-7-5.1-7-9.5V6l7-3z'/%3E%3Cpath d='M9.2 12.2l2 2 3.6-4'/%3E%3C/svg%3E" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: { 50:'#eef3ff',100:'#dbe6ff',200:'#bfd3ff',300:'#93b0f5',400:'#5f8bf0',500:'#2563eb',600:'#1d4ed8',700:'#1a3fae',800:'#173184',900:'#0f2c66' },
+          ink: '#0f172a'
+        },
+        fontFamily: {
+          sans: ['"PingFang SC"','"Microsoft YaHei"','"Source Han Sans SC"','"Noto Sans SC"','system-ui','sans-serif']
+        }
+      }
+    }
+  }
+</script>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="font-sans">
+
+<!-- ============================================================
+     整体框架：左侧导航 + 右侧内容区
+     ============================================================ -->
+<div class="flex h-screen overflow-hidden">
+
+  <!-- ==================== 左侧导航 ==================== -->
+  <!-- 移动端抽屉导航遮罩：抽屉打开时覆盖内容区，点击可收起 -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-40 bg-ink/60 hidden lg:hidden"></div>
+  <!-- 桌面端（lg 及以上）常驻左侧导航；移动端为抽屉式，由顶栏汉堡按钮唤出 -->
+  <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 z-50 w-[248px] flex-none bg-brand-900 text-white flex flex-col -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-out">
+    <!-- 品牌区 -->
+    <div class="px-5 pt-6 pb-5">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-white/[0.12] border border-white/20 flex items-center justify-center">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3l7 3v5.5c0 4.4-3 8-7 9.5-4-1.5-7-5.1-7-9.5V6l7-3z"/>
+            <path d="M9.2 12.2l2 2 3.6-4"/>
+          </svg>
+        </div>
+        <div class="leading-tight">
+          <div class="text-[17px] font-semibold tracking-wide">外服法务通</div>
+          <div class="text-[11px] text-white/55 mt-[2px]">LawLink · AI + 专家双驱</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 导航列表 -->
+    <nav class="flex-1 px-3 space-y-[3px] overflow-y-auto">
+      <div class="px-3 pt-2 pb-2 text-[11px] font-medium text-white/40 tracking-wider">核心功能</div>
+
+      <button class="nav-item is-active w-full flex items-center gap-3 px-3 py-[10px] rounded-lg text-[14px] text-white/80 hover:text-white hover:bg-white/[0.08]" data-page="dashboard">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="7.5" height="7.5" rx="1.6"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.6"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.6"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.6"/></svg>
+        <span>瞬时风控工作台</span>
+      </button>
+
+      <button class="nav-item w-full flex items-center gap-3 px-3 py-[10px] rounded-lg text-[14px] text-white/80 hover:text-white hover:bg-white/[0.08]" data-page="law">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 016.5 3H19v15H6.5A2.5 2.5 0 004 20.5V5.5z"/><path d="M8 7.5h7M8 11h5"/></svg>
+        <span>智能法规查询</span>
+        <span class="ml-auto text-[10px] px-1.5 py-[2px] rounded bg-sky-400/20 text-sky-200 font-medium">增强版</span>
+      </button>
+
+      <button class="nav-item w-full flex items-center gap-3 px-3 py-[10px] rounded-lg text-[14px] text-white/80 hover:text-white hover:bg-white/[0.08]" data-page="cases">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M5 8h14M7 8l-3 6h6L7 8zM17 8l-3 6h6l-3-6z"/></svg>
+        <span>类案检索智库</span>
+      </button>
+
+      <button class="nav-item w-full flex items-center gap-3 px-3 py-[10px] rounded-lg text-[14px] text-white/80 hover:text-white hover:bg-white/[0.08]" data-page="chat">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 01-11.6 7.1L4 21l1.9-5.4A8 8 0 1121 12z"/><path d="M9 11h6M9 14h4"/></svg>
+        <span>7×24 智能咨询</span>
+        <span class="ml-auto w-[7px] h-[7px] rounded-full bg-emerald-400 shadow-[0_0_0_3px_rgba(52,211,153,.22)]"></span>
+      </button>
+
+      <button class="nav-item w-full flex items-center gap-3 px-3 py-[10px] rounded-lg text-[14px] text-white/80 hover:text-white hover:bg-white/[0.08]" data-page="report">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-5-5z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>
+        <span>一键生成报告</span>
+      </button>
+
+      <button class="nav-item w-full flex items-center gap-3 px-3 py-[10px] rounded-lg text-[14px] text-white/80 hover:text-white hover:bg-white/[0.08]" data-page="experts">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20v-1.6a4 4 0 00-4-4H7a4 4 0 00-4 4V20"/><circle cx="9.5" cy="7.5" r="3.2"/><path d="M17 11.5a3.2 3.2 0 100-6.4M21 20v-1.6a4 4 0 00-3-3.87"/></svg>
+        <span>专家直达</span>
+      </button>
+
+      <div class="px-3 pt-5 pb-2 text-[11px] font-medium text-white/40 tracking-wider">项目</div>
+      <button class="nav-item w-full flex items-center gap-3 px-3 py-[10px] rounded-lg text-[14px] text-white/80 hover:text-white hover:bg-white/[0.08]" data-page="about">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.6v.2"/></svg>
+        <span>项目概况 · 里程碑</span>
+      </button>
+    </nav>
+
+    <!-- 底部：用户信息 -->
+    <div class="p-3">
+      <div class="rounded-xl bg-white/[0.08] border border-white/10 px-3 py-3 flex items-center gap-3">
+        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-sky-400 to-brand-500 flex items-center justify-center text-[13px] font-semibold">冯</div>
+        <div class="leading-tight min-w-0">
+          <div class="text-[13px] font-medium truncate">冯洁妍</div>
+          <div class="text-[11px] text-white/50 truncate">上海外服广东公司 · 智法先锋</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==================== 右侧内容区 ==================== -->
+  <div class="flex-1 flex flex-col min-w-0">
+
+    <!-- 顶栏 -->
+    <header id="topbar" class="flex-none h-[68px] bg-white border-b border-[#e5e8f0] px-4 md:px-7 flex items-center gap-3 md:gap-4">
+      <!-- 移动端汉堡按钮：lg 以下显示，唤出左侧抽屉导航 -->
+      <button id="sidebar-toggle" class="lg:hidden flex-none -ml-2 w-10 h-10 rounded-lg hover:bg-slate-100 active:bg-slate-200 text-slate-600 transition flex items-center justify-center" aria-label="打开导航菜单">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div class="min-w-0">
+        <h1 id="page-title" class="text-[17px] font-semibold text-ink leading-tight">瞬时风控工作台</h1>
+        <p id="page-sub" class="text-[12px] text-slate-500 mt-[3px] truncate">风险秒级识别 · 高价值需求自动直连专家</p>
+      </div>
+
+      <div class="ml-auto flex items-center gap-3 no-print">
+        <div class="hidden lg:flex items-center gap-2 px-3 h-9 rounded-lg bg-slate-50 border border-[#e5e8f0] text-[12px] text-slate-600">
+          <span class="w-[6px] h-[6px] rounded-full bg-emerald-500"></span>
+          政策库已同步至 2026-08 · 覆盖 <b class="text-ink font-semibold">512</b> 城市
+        </div>
+        <div class="hidden xl:flex items-center gap-2 px-3 h-9 rounded-lg bg-brand-50 border border-brand-100 text-[12px] text-brand-700 font-medium">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 3l7 3v5.5c0 4.4-3 8-7 9.5-4-1.5-7-5.1-7-9.5V6l7-3z"/></svg>
+          瞬时风控 · 已开启
+        </div>
+      </div>
+    </header>
+
+    <!-- 页面容器 -->
+    <main id="viewport" class="flex-1 overflow-y-auto p-4 md:p-7">
+
+      <!-- ==========================================================
+           页面 1：瞬时风控工作台
+           ========================================================== -->
+      <section id="page-dashboard" class="page is-active" data-title="瞬时风控工作台" data-sub="风险秒级识别 · 高价值需求自动直连专家">
+
+        <!-- KPI -->
+        <div class="grid grid-cols-2 xl:grid-cols-4 gap-4" id="kpi-row"></div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 mt-5">
+
+          <!-- 瞬时体检 -->
+          <div class="xl:col-span-2 rise rounded-2xl bg-white border border-[#e5e8f0] shadow-[0_1px_2px_rgba(16,24,40,.04)]">
+            <div class="px-6 pt-5 pb-4 border-b border-[#eef1f7] flex items-center gap-3">
+              <span class="w-1 h-4 rounded bg-brand-500"></span>
+              <h3 class="font-semibold text-[15px]">瞬时风控体检</h3>
+              <span class="tag bg-brand-50 text-brand-700 border border-brand-100">AI 引擎 v3.2</span>
+            </div>
+            <div class="p-6">
+              <p class="text-[13px] text-slate-500 mb-3">用一句话描述你正在处理的用工情形，系统将秒级输出风险等级、风险点与属地化依据。</p>
+              <div class="flex gap-3">
+                <input id="risk-input" type="text" value="试用期第 2 个月，员工考核不合格，想直接解除劳动合同"
+                  class="flex-1 h-12 px-4 rounded-xl border border-[#dde3ee] bg-slate-50/60 text-[14px] outline-none focus:border-brand-400 focus:bg-white focus:ring-4 focus:ring-brand-50 transition" />
+                <button id="risk-btn" class="h-12 px-6 rounded-xl bg-brand-600 hover:bg-brand-700 active:scale-[.98] text-white text-[14px] font-medium transition shadow-sm whitespace-nowrap">
+                  瞬时体检
+                </button>
+              </div>
+              <div id="risk-result" class="mt-5"></div>
+            </div>
+          </div>
+
+          <!-- 待办 / 预警 -->
+          <div class="rise rounded-2xl bg-white border border-[#e5e8f0] shadow-[0_1px_2px_rgba(16,24,40,.04)]" style="animation-delay:.06s">
+            <div class="px-6 pt-5 pb-4 border-b border-[#eef1f7] flex items-center gap-3">
+              <span class="w-1 h-4 rounded bg-rose-500"></span>
+              <h3 class="font-semibold text-[15px]">高危预警 · 待专家介入</h3>
+              <span id="todo-count" class="ml-auto text-[12px] text-slate-400"></span>
+            </div>
+            <div id="todo-list" class="p-3 space-y-2"></div>
+          </div>
+        </div>
+
+        <!-- 近 7 日趋势 + 分流结构 -->
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 mt-5">
+          <div class="xl:col-span-2 rise rounded-2xl bg-white border border-[#e5e8f0] p-6" style="animation-delay:.1s">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="w-1 h-4 rounded bg-sky-500"></span>
+              <h3 class="font-semibold text-[15px]">近 7 日咨询量与 AI 自主解决率</h3>
+              <span class="ml-auto text-[12px] text-slate-400">单位：次 / %</span>
+            </div>
+            <div id="trend-chart" class="h-[186px] flex items-end gap-3"></div>
+          </div>
+
+          <div class="rise rounded-2xl bg-white border border-[#e5e8f0] p-6" style="animation-delay:.14s">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="w-1 h-4 rounded bg-amber-500"></span>
+              <h3 class="font-semibold text-[15px]">咨询分流结构</h3>
+            </div>
+            <div id="split-list" class="space-y-4"></div>
+          </div>
+        </div>
+
+        <!-- 三道防线 · 人工审核机制（对齐立项卡人工审核点/风险边界） -->
+        <div class="rise rounded-2xl bg-white border border-[#e5e8f0] p-6 mt-5" style="animation-delay:.18s">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="w-1 h-4 rounded bg-rose-500"></span>
+            <h3 class="font-semibold text-[15px]">三道防线 · 人工审核机制</h3>
+            <span class="ml-auto text-[11px] text-slate-400">对齐立项卡「人工审核点 / 风险边界」</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3" id="defense-list"></div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           页面 2：智能法规查询（增强版 · 本地化适用指引）
+           ========================================================== -->
+      <section id="page-law" class="page" data-title="智能法规查询增强版" data-sub="目标 512 城属地政策库（演示已收录 58 城 · 6 城精编口径）· 输出“本地化适用指引”而非单纯法条">
+
+        <div class="rise rounded-2xl bg-white border border-[#e5e8f0] p-6">
+          <!-- 用工所在地：可搜索选择器（中文 / 拼音首字母） -->
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="text-[13px] text-slate-500 flex-none">用工所在地</span>
+
+            <div class="relative" id="law-city-picker">
+              <div class="flex items-center gap-2 h-11 pl-3 pr-2 rounded-xl border border-[#dde3ee] bg-slate-50/60 focus-within:border-brand-400 focus-within:bg-white focus-within:ring-4 focus-within:ring-brand-50 transition">
+                <svg class="text-slate-400 flex-none" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                <input id="law-city-input" type="text" autocomplete="off" placeholder="输入城市名或拼音（长沙 / cs）"
+                  class="w-[200px] h-full bg-transparent text-[13.5px] outline-none placeholder:text-slate-400" />
+                <span id="law-city-cur" class="tag bg-brand-50 text-brand-700 border border-brand-100 flex-none">广州市</span>
+              </div>
+              <div id="law-city-drop" class="hidden absolute z-40 left-0 mt-2 w-[330px] max-w-[calc(100vw-2.5rem)] max-h-[286px] overflow-auto rounded-xl border border-[#e5e8f0] bg-white shadow-[0_14px_34px_rgba(16,24,40,.14)] p-2"></div>
+            </div>
+
+            <span class="text-[12px] text-slate-400">已收录 <b class="text-slate-600" id="law-city-count">0</b> 个主要用工城市</span>
+            <span class="ml-auto text-[11.5px] text-slate-400">也可直接在下方提问中写城市名，将自动切换所在地</span>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2 mt-3 text-[12px]">
+            <span class="text-slate-400 mr-1">热门城市：</span>
+            <div id="law-hot" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <div class="flex flex-wrap gap-3 mt-5">
+            <div class="relative flex-1 min-w-[300px]">
+              <svg class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+              <input id="law-query" type="text" value="试用期解除劳动合同是否合法"
+                class="w-full h-12 pl-11 pr-4 rounded-xl border border-[#dde3ee] bg-slate-50/60 text-[14px] outline-none focus:border-brand-400 focus:bg-white focus:ring-4 focus:ring-brand-50 transition" />
+            </div>
+            <button id="law-btn" class="h-12 px-6 rounded-xl bg-brand-600 hover:bg-brand-700 active:scale-[.98] text-white text-[14px] font-medium transition shadow-sm">查询适用指引</button>
+          </div>
+          <div class="flex flex-wrap gap-2 mt-4 text-[12px]">
+            <span class="text-slate-400 mr-1">常用：</span>
+            <span class="chip px-3 py-1 rounded-full" data-law-quick="试用期解除劳动合同是否合法">试用期解除</span>
+            <span class="chip px-3 py-1 rounded-full" data-law-quick="加班费计算基数如何确定">加班费基数</span>
+            <span class="chip px-3 py-1 rounded-full" data-law-quick="竞业限制补偿金标准">竞业限制补偿</span>
+            <span class="chip px-3 py-1 rounded-full" data-law-quick="经济性裁员的法定程序">经济性裁员程序</span>
+            <span class="chip px-3 py-1 rounded-full" data-law-quick="劳务派遣用工比例上限">派遣用工比例</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 mt-5">
+          <div class="xl:col-span-2 rise rounded-2xl bg-white border border-[#e5e8f0] p-6" style="animation-delay:.06s">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="w-1 h-4 rounded bg-brand-500"></span>
+              <h3 class="font-semibold text-[15px]">本地化适用指引</h3>
+              <span id="law-scope" class="tag bg-slate-100 text-slate-600 ml-auto"></span>
+            </div>
+            <div id="law-summary" class="space-y-4"></div>
+          </div>
+
+          <div class="rise rounded-2xl bg-white border border-[#e5e8f0] p-6" style="animation-delay:.1s">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="w-1 h-4 rounded bg-sky-500"></span>
+              <h3 class="font-semibold text-[15px]">同题差异速览</h3>
+              <span id="law-diff-topic" class="ml-auto text-[11px] text-slate-400"></span>
+            </div>
+            <div id="law-diff" class="space-y-3"></div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 mt-5">
+          <div class="rise rounded-2xl bg-white border border-[#e5e8f0] p-6" style="animation-delay:.14s">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="w-1 h-4 rounded bg-emerald-500"></span>
+              <h3 class="font-semibold text-[15px]">法条依据</h3>
+            </div>
+            <div id="law-articles" class="space-y-3"></div>
+          </div>
+          <div class="rise rounded-2xl bg-white border border-[#e5e8f0] p-6" style="animation-delay:.18s">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="w-1 h-4 rounded bg-amber-500"></span>
+              <h3 class="font-semibold text-[15px]">实操清单 · 可勾选</h3>
+              <span id="law-progress" class="ml-auto text-[12px] text-slate-400"></span>
+            </div>
+            <div id="law-checklist" class="space-y-2"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           页面 3：垂直类案检索智库
+           ========================================================== -->
+      <section id="page-cases" class="page" data-title="垂直类案检索智库" data-sub="劳动争议垂直语料 · 输出判例倾向预判而非罗列判决书">
+
+        <div class="rise rounded-2xl bg-white border border-[#e5e8f0] p-6">
+          <div class="flex flex-wrap gap-3">
+            <div class="relative flex-1 min-w-[300px]">
+              <svg class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+              <input id="case-query" type="text" value="试用期以不符合录用条件解除 违法解除赔偿金"
+                class="w-full h-12 pl-11 pr-4 rounded-xl border border-[#dde3ee] bg-slate-50/60 text-[14px] outline-none focus:border-brand-400 focus:bg-white focus:ring-4 focus:ring-brand-50 transition" />
+            </div>
+            <button id="case-btn" class="h-12 px-6 rounded-xl bg-brand-600 hover:bg-brand-700 active:scale-[.98] text-white text-[14px] font-medium transition shadow-sm">检索并预判</button>
+          </div>
+
+          <div class="flex flex-wrap gap-2 mt-4 text-[12px]">
+            <span class="text-slate-400 mr-1">常用检索：</span>
+            <span class="chip px-3 py-1 rounded-full" data-case-quick="试用期以不符合录用条件解除 违法解除赔偿金">试用期解除</span>
+            <span class="chip px-3 py-1 rounded-full" data-case-quick="加班费计算基数 综合计算工时 举证责任">加班费基数</span>
+            <span class="chip px-3 py-1 rounded-full" data-case-quick="竞业限制补偿金标准 违约金过高酌减">竞业限制</span>
+            <span class="chip px-3 py-1 rounded-full" data-case-quick="经济性裁员 提前三十日说明情况 工会程序">经济性裁员</span>
+            <span class="chip px-3 py-1 rounded-full" data-case-quick="劳务派遣用工比例 三性岗位 同工同酬">派遣用工比例</span>
+            <span class="chip px-3 py-1 rounded-full" data-case-quick="严重违反规章制度 违纪解除 公示程序">违纪解除</span>
+          </div>
+
+          <div id="case-hit" class="mt-4"></div>
+
+          <!-- 筛选栏：选项与命中数由当前专题的案例数据动态生成，避免出现「点了没反应」的死选项 -->
+          <div class="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-[#eef1f7] text-[12px]">
+            <span class="text-slate-400 mr-1">裁判年份</span>
+            <div id="case-years" class="flex flex-wrap gap-2"></div>
+            <span class="text-slate-400 ml-4 mr-1">法院层级</span>
+            <div id="case-levels" class="flex flex-wrap gap-2"></div>
+            <span id="case-filter-tip" class="ml-auto text-[11.5px] text-slate-400"></span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-5 gap-5 mt-5">
+          <!-- 倾向预判 -->
+          <div class="xl:col-span-2 rise rounded-2xl bg-white border border-[#e5e8f0] p-6">
+            <div class="flex items-center gap-3 mb-1">
+              <span class="w-1 h-4 rounded bg-violet-500"></span>
+              <h3 class="font-semibold text-[15px]">判例倾向预判</h3>
+              <span id="case-topic" class="tag bg-violet-50 text-violet-700 border border-violet-100 ml-auto"></span>
+            </div>
+            <p class="text-[12px] text-slate-400 mb-5">基于 <b id="case-corpus" class="text-slate-500">0</b> 份同类生效裁判文书统计</p>
+            <div id="case-tendency" class="space-y-4"></div>
+            <div class="mt-6 pt-5 border-t border-[#eef1f7]">
+              <div class="text-[12px] text-slate-400 mb-2">核心裁判要旨</div>
+              <p id="case-gist" class="text-[13px] leading-6 text-slate-700"></p>
+            </div>
+          </div>
+
+          <!-- 类案列表 -->
+          <div class="xl:col-span-3 rise rounded-2xl bg-white border border-[#e5e8f0] p-6" style="animation-delay:.06s">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="w-1 h-4 rounded bg-brand-500"></span>
+              <h3 class="font-semibold text-[15px]">类案清单</h3>
+              <span class="text-[11.5px] text-slate-400 ml-1">点击卡片展开裁判要点</span>
+              <button id="case-clear" class="hidden h-7 px-3 rounded-lg border border-[#dde3ee] text-slate-600 text-[11.5px] hover:border-brand-300 hover:text-brand-700 transition">清除筛选</button>
+              <span id="case-count" class="ml-auto text-[12px] text-slate-400"></span>
+            </div>
+            <div id="case-list" class="space-y-3"></div>
+            <p class="text-[11px] text-slate-400 mt-4 pt-3 border-t border-[#f2f5fa]">※ 演示环境内置 6 大专题共 60 篇裁判文书（每专题 10 篇，覆盖最高院至基层院、2021—2025 年）；正式版将接入全量文书库全文检索。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           页面 4：7×24 智能咨询 + 专家智能分流
+           ========================================================== -->
+      <section id="page-chat" class="page" data-title="7×24 智能咨询" data-sub="AI 即时解答并智能分流，复杂需求一键直达领域专家">
+
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-5">
+          <!-- 对话区 -->
+          <div class="xl:col-span-2 rise rounded-2xl bg-white border border-[#e5e8f0] flex flex-col h-[calc(100vh-160px)] min-h-[520px]">
+            <div class="flex-none px-6 py-4 border-b border-[#eef1f7] flex items-center gap-3">
+              <span class="w-9 h-9 rounded-full bg-gradient-to-br from-brand-500 to-sky-400 flex items-center justify-center text-white">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 3l7 3v5.5c0 4.4-3 8-7 9.5-4-1.5-7-5.1-7-9.5V6l7-3z"/></svg>
+              </span>
+              <div class="leading-tight">
+                <div class="font-semibold text-[14px]">法务通智能助手</div>
+                <div class="text-[11px] text-slate-400 mt-[2px] flex items-center gap-1">
+                  <span class="w-[6px] h-[6px] rounded-full bg-emerald-500"></span> 在线 · 已接入 512 城属地政策库
+                </div>
+              </div>
+              <span class="ml-auto tag bg-slate-100 text-slate-500">会话 #FSG-20261008-0417</span>
+            </div>
+
+            <div id="chat-log" class="flex-1 overflow-y-auto px-6 py-5 space-y-5 bg-slate-50/40"></div>
+
+            <div class="flex-none border-t border-[#eef1f7] p-4">
+              <div id="chat-quick" class="flex flex-wrap gap-2 mb-3"></div>
+              <div class="flex gap-3">
+                <input id="chat-input" type="text" placeholder="描述你的用工问题，例如：员工不辞而别，工资怎么结？"
+                  class="flex-1 h-11 px-4 rounded-xl border border-[#dde3ee] bg-slate-50/60 text-[14px] outline-none focus:border-brand-400 focus:bg-white focus:ring-4 focus:ring-brand-50 transition" />
+                <button id="chat-send" class="h-11 px-5 rounded-xl bg-brand-600 hover:bg-brand-700 active:scale-[.98] text-white text-[14px] font-medium transition">发送</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 专家分流 -->
+          <div class="rise rounded-2xl bg-white border border-[#e5e8f0] flex flex-col h-[calc(100vh-160px)] min-h-[520px]" style="animation-delay:.06s">
+            <div class="flex-none px-6 py-4 border-b border-[#eef1f7] flex items-center gap-3">
+              <span class="w-1 h-4 rounded bg-brand-500"></span>
+              <h3 class="font-semibold text-[15px]">专家智能分流</h3>
+            </div>
+            <div class="flex-1 overflow-y-auto p-5">
+              <div id="match-head" class="rounded-xl bg-brand-50 border border-brand-100 p-4 mb-4">
+                <div class="text-[12px] text-brand-700 font-medium mb-1">当前需求识别</div>
+                <div id="match-intent" class="text-[14px] font-semibold text-brand-900">等待对话输入…</div>
+              </div>
+              <div class="text-[12px] text-slate-400 mb-3">匹配专家（按契合度排序）</div>
+              <div id="match-list" class="space-y-3"></div>
+            </div>
+            <div class="flex-none p-5 pt-0">
+              <button id="match-cta" class="w-full h-11 rounded-xl bg-brand-900 hover:bg-brand-800 text-white text-[14px] font-medium transition disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+                一键直连专家
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           页面 5：一键生成法律分析报告
+           ========================================================== -->
+      <section id="page-report" class="page" data-title="一键生成法律分析报告" data-sub="自动输出风险点、法规依据与处置建议草案，可导出交付">
+
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-5">
+          <!-- 生成配置 -->
+          <div class="rise rounded-2xl bg-white border border-[#e5e8f0] p-6 no-print">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="w-1 h-4 rounded bg-brand-500"></span>
+              <h3 class="font-semibold text-[15px]">报告配置</h3>
+            </div>
+
+            <div id="rpt-quotes" class="mb-5"></div>
+
+            <label class="text-[12px] text-slate-500">报告模板</label>
+            <div id="rpt-tpl" class="space-y-2 mt-2 mb-5"></div>
+
+            <!-- 用工所在地：与「智能法规查询」同一套可搜索城市库（中文 / 拼音首字母 / 省份） -->
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-[12px] text-slate-500">用工所在地</label>
+              <span class="text-[11px] text-slate-400">已收录 <b class="text-slate-600" id="rpt-city-count">0</b> 个城市</span>
+            </div>
+            <div class="relative mb-3" id="rpt-city-picker">
+              <div class="flex items-center gap-2 h-11 pl-3 pr-2 rounded-xl border border-[#dde3ee] bg-slate-50/60 focus-within:border-brand-400 focus-within:bg-white focus-within:ring-4 focus-within:ring-brand-50 transition">
+                <svg class="text-slate-400 flex-none" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                <input id="rpt-city-input" type="text" autocomplete="off" placeholder="输入城市名或拼音（长沙 / cs）"
+                  class="flex-1 min-w-0 h-full bg-transparent text-[13.5px] outline-none placeholder:text-slate-400" />
+                <span id="rpt-city-cur" class="tag bg-brand-50 text-brand-700 border border-brand-100 flex-none">广州市</span>
+              </div>
+              <div id="rpt-city-drop" class="hidden absolute z-40 left-0 right-0 mt-2 max-h-[286px] overflow-auto rounded-xl border border-[#e5e8f0] bg-white shadow-[0_14px_34px_rgba(16,24,40,.14)] p-2"></div>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap mb-5">
+              <span id="rpt-city-tier" class="tag">精编属地指引</span>
+              <span id="rpt-city-hint" class="text-[11px] text-slate-400"></span>
+            </div>
+
+            <label class="text-[12px] text-slate-500">案情描述</label>
+            <textarea id="rpt-scene" rows="5" class="w-full mt-2 mb-5 p-3 rounded-xl border border-[#dde3ee] bg-slate-50/60 text-[13px] leading-6 outline-none focus:border-brand-400 focus:bg-white transition resize-none">某科技公司拟对一名入职 2 个月的员工，以"试用期考核不合格"为由解除劳动合同，员工月薪 12,000 元，未签订书面录用条件确认书，考核记录仅有直属主管口头评价。</textarea>
+
+            <button id="rpt-gen" class="w-full h-12 rounded-xl bg-brand-600 hover:bg-brand-700 active:scale-[.99] text-white text-[14px] font-medium transition shadow-sm">生成分析报告</button>
+
+            <div id="rpt-progress" class="mt-5 hidden">
+              <div class="flex items-center justify-between text-[12px] text-slate-500 mb-2">
+                <span id="rpt-step">正在解析案情…</span><span id="rpt-pct">0%</span>
+              </div>
+              <div class="stat-bar"><i id="rpt-bar" style="width:0%;background:linear-gradient(90deg,#2563eb,#38bdf8)"></i></div>
+            </div>
+          </div>
+
+          <!-- 报告纸面 -->
+          <div class="xl:col-span-2">
+            <div id="report-holder" class="rise rounded-2xl bg-white border border-[#e5e8f0] min-h-[560px] flex items-center justify-center" style="animation-delay:.06s">
+              <div class="text-center px-10 py-20">
+                <div class="w-16 h-16 mx-auto rounded-2xl bg-slate-50 border border-[#e5e8f0] flex items-center justify-center text-slate-300">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-5-5z"/><path d="M14 3v5h5"/></svg>
+                </div>
+                <p class="mt-4 text-[14px] text-slate-500">左填写案情，点击「生成分析报告」</p>
+                <p class="text-[12px] text-slate-400 mt-1">系统将自动产出风险点清单、法规依据与处置建议草案</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           页面 6：专家直达 · 服务闭环
+           ========================================================== -->
+      <section id="page-experts" class="page" data-title="专家直达 · 服务闭环" data-sub="AI 识别复杂需求并按领域智能分派，服务流程线上化、节点可视化">
+
+        <!-- 流程时间轴 -->
+        <div class="rise rounded-2xl bg-white border border-[#e5e8f0] p-6">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="w-1 h-4 rounded bg-brand-500"></span>
+            <h3 class="font-semibold text-[15px]">专家服务闭环流程</h3>
+            <span class="ml-auto tag bg-emerald-50 text-emerald-700 border border-emerald-100">全流程线上化 · 节点可视化</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-4" id="flow-steps"></div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 mt-5">
+          <!-- 专家列表 -->
+          <div class="xl:col-span-2 rise rounded-2xl bg-white border border-[#e5e8f0] p-6" style="animation-delay:.06s">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="w-1 h-4 rounded bg-brand-500"></span>
+              <h3 class="font-semibold text-[15px]">智法先锋 · 专家库</h3>
+              <span class="ml-auto text-[12px] text-slate-400">上海外服广东公司 · 8 人团队</span>
+            </div>
+            <div id="expert-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+          </div>
+
+          <!-- 商业飞轮 -->
+          <div class="rise rounded-2xl bg-white border border-[#e5e8f0] p-6" style="animation-delay:.1s">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="w-1 h-4 rounded bg-amber-500"></span>
+              <h3 class="font-semibold text-[15px]">商业飞轮</h3>
+            </div>
+            <div class="flex justify-center py-2">
+              <svg viewBox="0 0 240 240" width="220" height="220">
+                <circle cx="120" cy="120" r="86" fill="none" stroke="#e5e8f0" stroke-width="1.5" stroke-dasharray="4 5"/>
+                <g class="flywheel">
+                  <path d="M120 34a86 86 0 0161 25" fill="none" stroke="#93b0f5" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M181 59a86 86 0 0125 61" fill="none" stroke="#93b0f5" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M206 120a86 86 0 01-25 61" fill="none" stroke="#93b0f5" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M181 181a86 86 0 01-61 25" fill="none" stroke="#93b0f5" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M120 206a86 86 0 01-61-25" fill="none" stroke="#93b0f5" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M59 181a86 86 0 01-25-61" fill="none" stroke="#93b0f5" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M34 120a86 86 0 0125-61" fill="none" stroke="#93b0f5" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M59 59a86 86 0 0161-25" fill="none" stroke="#93b0f5" stroke-width="3" stroke-linecap="round"/>
+                </g>
+                <circle cx="120" cy="120" r="52" fill="#eef3ff" stroke="#dbe6ff"/>
+                <text x="120" y="112" text-anchor="middle" font-size="13" font-weight="700" fill="#1d4ed8">AI 引流</text>
+                <text x="120" y="132" text-anchor="middle" font-size="11" fill="#2563eb">数据反哺</text>
+              </svg>
+            </div>
+            <div class="space-y-3 mt-2">
+              <div class="flex items-start gap-3"><span class="tag bg-brand-50 text-brand-700 border border-brand-100">1</span><p class="text-[13px] text-slate-600 leading-6">AI 基础服务免费 / 低价引流，扩大客群基数</p></div>
+              <div class="flex items-start gap-3"><span class="tag bg-sky-50 text-sky-700 border border-sky-100">2</span><p class="text-[13px] text-slate-600 leading-6">即时、专业的响应建立客户信任</p></div>
+              <div class="flex items-start gap-3"><span class="tag bg-violet-50 text-violet-700 border border-violet-100">3</span><p class="text-[13px] text-slate-600 leading-6">复杂需求转专家深度服务，实现价值变现</p></div>
+              <div class="flex items-start gap-3"><span class="tag bg-emerald-50 text-emerald-700 border border-emerald-100">4</span><p class="text-[13px] text-slate-600 leading-6">沉淀匿名实践数据，反哺 AI 迭代与产品化复制</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           页面 7：项目概况 · 里程碑
+           ========================================================== -->
+      <section id="page-about" class="page" data-title="项目概况 · 里程碑" data-sub="东浩兰生“AI来赛”数智化创新大赛 · 赛博革新赛道">
+
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-5">
+          <div class="xl:col-span-2 rise rounded-2xl bg-gradient-to-br from-brand-900 to-brand-700 text-white p-7">
+            <div class="text-[12px] text-white/60 mb-2">东浩兰生 2026-2027 专项劳动竞赛暨"AI来赛"数智化创新大赛</div>
+            <h2 class="text-[26px] font-semibold leading-snug">外服法务通：瞬时风控，专家直达</h2>
+            <p class="text-[13px] text-white/70 mt-3 leading-6 max-w-[640px]">依托外服 40 余年专业积淀与数千起实战案例，融合 AI 技术构建"智能工具 + 专家智慧"双驱新生态，突破时空壁垒，实现普惠合规与专家价值最大化。</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-7" id="about-meta"></div>
+          </div>
+
+          <div class="rise rounded-2xl bg-white border border-[#e5e8f0] p-6" style="animation-delay:.06s">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="w-1 h-4 rounded bg-amber-500"></span>
+              <h3 class="font-semibold text-[15px]">三维评级口径</h3>
+              <span class="ml-auto text-[11px] text-slate-400">集团项目组评定</span>
+            </div>
+            <div class="rounded-xl border border-[#e5e8f0] p-5 mb-4">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-[12px] text-slate-500">难度星级</span>
+                <span class="text-[15px] font-semibold tracking-[2px] text-amber-500">★★★★</span>
+              </div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-[12px] text-slate-500">成熟度</span>
+                <span class="tag bg-sky-50 text-sky-700 border border-sky-100">概念设计期</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-[12px] text-slate-500">本期建议类型</span>
+                <span class="tag bg-brand-50 text-brand-700 border border-brand-100">里程碑 + 跃迁</span>
+              </div>
+            </div>
+            <div class="text-[12px] text-slate-400 leading-6">
+              42 个项目总览第 26 号 · 外服云/广东公司 · 赛博革新赛道<br/>
+              概念期项目评审口径：先问 M1 是否完成，再看跃迁清单认领情况。
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 mt-5">
+          <div class="rise rounded-2xl bg-white border border-[#e5e8f0] p-6" style="animation-delay:.1s">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="w-1 h-4 rounded bg-brand-500"></span>
+              <h3 class="font-semibold text-[15px]">落地里程碑</h3>
+            </div>
+            <div class="space-y-4" id="milestones"></div>
+          </div>
+
+          <div class="rise rounded-2xl bg-white border border-[#e5e8f0] p-6" style="animation-delay:.14s">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="w-1 h-4 rounded bg-emerald-500"></span>
+              <h3 class="font-semibold text-[15px]">两级跃迁路径</h3>
+            </div>
+            <div class="space-y-4" id="leaps"></div>
+          </div>
+        </div>
+        <!-- 立项卡七要素（中期评审对照） -->
+        <div class="rise rounded-2xl bg-white border border-[#e5e8f0] p-6 mt-5" style="animation-delay:.18s">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="w-1 h-4 rounded bg-rose-500"></span>
+            <h3 class="font-semibold text-[15px]">立项卡七要素</h3>
+            <span class="tag bg-rose-50 text-rose-600 border border-rose-100">缺任一视为不通过</span>
+            <span class="ml-auto text-[11px] text-slate-400">对照《项目立项卡》模板</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3" id="charter-grid"></div>
+        </div>
+
+        <!-- 评测指标 + 知识沉淀 -->
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 mt-5">
+          <div class="rise rounded-2xl bg-white border border-[#e5e8f0] p-6" style="animation-delay:.22s">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="w-1 h-4 rounded bg-sky-500"></span>
+              <h3 class="font-semibold text-[15px]">中期评测指标（自测）</h3>
+              <span class="ml-auto text-[11px] text-slate-400">对照《项目中期评测报告》</span>
+            </div>
+            <div class="overflow-x-auto"><table class="w-full text-[12.5px] border border-[#e5e8f0] rounded-lg overflow-hidden min-w-[520px]">
+              <thead class="bg-slate-50 text-slate-500">
+                <tr>
+                  <th class="text-left font-medium px-3 py-2.5 border-b border-[#e5e8f0]">评测指标</th>
+                  <th class="text-left font-medium px-3 py-2.5 border-b border-[#e5e8f0]">目标值</th>
+                  <th class="text-left font-medium px-3 py-2.5 border-b border-[#e5e8f0]">实测值</th>
+                  <th class="text-left font-medium px-3 py-2.5 border-b border-[#e5e8f0]">判定</th>
+                  <th class="text-left font-medium px-3 py-2.5 border-b border-[#e5e8f0]">备注</th>
+                </tr>
+              </thead>
+              <tbody id="metrics-body"></tbody>
+            </table></div>
+          </div>
+
+          <div class="rise rounded-2xl bg-white border border-[#e5e8f0] p-6" style="animation-delay:.26s">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="w-1 h-4 rounded bg-violet-500"></span>
+              <h3 class="font-semibold text-[15px]">知识沉淀 · 可复用资产</h3>
+              <span class="tag bg-violet-50 text-violet-600 border border-violet-100">K8 ≥3 个满分</span>
+            </div>
+            <div class="space-y-3" id="skills-list"></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/render.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

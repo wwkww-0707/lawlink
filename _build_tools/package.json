@@ -1,0 +1,11 @@
+{
+  "name": "lawlink-build-tools",
+  "private": true,
+  "description": "Tailwind CSS 本地编译工具（仅构建期使用，不进入部署包）",
+  "scripts": {
+    "build:css": "tailwindcss -i input.css -o ../dist/css/tailwind.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}

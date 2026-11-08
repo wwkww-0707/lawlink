@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>外服法务通 LawLink · 瞬时风控，专家直达</title>
+<meta name="description" content="外服法务通：AI + 专家双驱的用工合规风控平台。一句话瞬时体检、多城市法规口径比对、类案倾向预判、7×24 智能咨询、一键生成法律分析报告、专家 30 分钟直达。" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231d4ed8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3l7 3v5.5c0 4.4-3 8-7 9.5-4-1.5-7-5.1-7-9.5V6l7-3z'/%3E%3Cpath d='M9.2 12.2l2 2 3.6-4'/%3E%3C/svg%3E" />
+<!-- 生产构建：Tailwind 已本地编译（无 CDN 依赖，可离线/内网部署） -->
+<link rel="stylesheet" href="css/tailwind.css" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="font-sans bg-white text-ink antialiased">
+
+<!-- ============================================================
+     ① 吸顶导航：滚动后白底投影；移动端汉堡展开
+     ============================================================ -->
+<header id="nav" class="fixed top-0 inset-x-0 z-50 transition-all duration-300">
+  <div class="max-w-6xl mx-auto px-4 md:px-6">
+    <div class="flex items-center justify-between h-[64px]">
+      <!-- 品牌标识 -->
+      <a href="#top" class="flex items-center gap-2.5 group">
+        <div id="nav-logo" class="w-9 h-9 rounded-xl border border-white/20 bg-white/[0.12] flex items-center justify-center transition-colors">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" class="text-white transition-colors">
+            <path d="M12 3l7 3v5.5c0 4.4-3 8-7 9.5-4-1.5-7-5.1-7-9.5V6l7-3z"/>
+            <path d="M9.2 12.2l2 2 3.6-4"/>
+          </svg>
+        </div>
+        <div class="leading-tight">
+          <div id="nav-title" class="text-[16px] font-semibold text-white transition-colors">外服法务通</div>
+          <div id="nav-sub" class="text-[10px] text-white/50 transition-colors hidden sm:block">LawLink · AI + 专家双驱</div>
+        </div>
+      </a>
+
+      <!-- 桌面端锚点导航 -->
+      <nav class="hidden md:flex items-center gap-1">
+        <a href="#features"  class="nav-link px-3.5 py-2 rounded-lg text-[14px] text-white/75 hover:text-white transition-colors">核心能力</a>
+        <a href="#guardrails" class="nav-link px-3.5 py-2 rounded-lg text-[14px] text-white/75 hover:text-white transition-colors">安全护栏</a>
+        <a href="#metrics" class="nav-link px-3.5 py-2 rounded-lg text-[14px] text-white/75 hover:text-white transition-colors">评测指标</a>
+        <a href="#milestones" class="nav-link px-3.5 py-2 rounded-lg text-[14px] text-white/75 hover:text-white transition-colors">里程碑</a>
+        <a href="demo.html" class="ml-2 px-4 py-2 rounded-xl bg-white text-brand-800 text-[14px] font-semibold hover:bg-brand-50 transition-colors shadow-sm">进入演示 →</a>
+      </nav>
+
+      <!-- 移动端汉堡 -->
+      <button id="nav-burger" class="md:hidden w-10 h-10 -mr-2 rounded-lg flex items-center justify-center text-white" aria-label="打开菜单">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+
+    <!-- 移动端抽屉菜单 -->
+    <div id="nav-menu" class="md:hidden hidden pb-4">
+      <div class="rounded-2xl bg-white shadow-xl border border-[#e5e8f0] p-2 space-y-1">
+        <a href="#features"  class="block px-4 py-2.5 rounded-xl text-[15px] text-slate-700 hover:bg-brand-50 hover:text-brand-700">核心能力</a>
+        <a href="#guardrails" class="block px-4 py-2.5 rounded-xl text-[15px] text-slate-700 hover:bg-brand-50 hover:text-brand-700">安全护栏</a>
+        <a href="#metrics" class="block px-4 py-2.5 rounded-xl text-[15px] text-slate-700 hover:bg-brand-50 hover:text-brand-700">评测指标</a>
+        <a href="#milestones" class="block px-4 py-2.5 rounded-xl text-[15px] text-slate-700 hover:bg-brand-50 hover:text-brand-700">里程碑</a>
+        <a href="demo.html" class="block px-4 py-2.5 rounded-xl text-[15px] font-semibold text-white bg-brand-600 hover:bg-brand-700 text-center">进入在线演示</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================
+     ② Hero 首屏：深蓝渐变 + 产品界面预演卡
+     ============================================================ -->
+<section id="top" class="relative overflow-hidden bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700 text-white">
+  <!-- 背景装饰：柔光 + 网格 -->
+  <div class="pointer-events-none absolute inset-0 opacity-40" style="background:radial-gradient(600px 300px at 15% 20%, rgba(95,139,240,.35), transparent 60%), radial-gradient(500px 260px at 85% 75%, rgba(52,211,153,.18), transparent 60%)"></div>
+  <div class="pointer-events-none absolute inset-0 opacity-[0.06]" style="background-image:linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px); background-size:44px 44px"></div>
+
+  <div class="relative max-w-6xl mx-auto px-4 md:px-6 pt-[132px] pb-16 md:pt-[150px] md:pb-20">
+    <div class="grid lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+
+      <!-- 左：主文案 -->
+      <div class="lg:col-span-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.12] border border-white/15 text-[12px] text-sky-200 font-medium mb-6">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          上海外服广东公司 · 智法先锋 · 赛博革新组
+        </div>
+        <h1 class="text-[34px] md:text-[48px] leading-[1.15] font-bold tracking-tight">
+          让用工风控<br/>快过风险发生
+        </h1>
+        <p class="mt-5 text-[15px] md:text-[17px] leading-relaxed text-white/65 max-w-[520px]">
+          一句话描述情形，AI 秒级给出风险等级与处置建议；属地口径差异、类案裁判倾向一并佐证；高价值需求 30 分钟直达执业律师——从咨询到报告，一条链路闭环。
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="demo.html" class="px-6 py-3 rounded-xl bg-white text-brand-800 font-semibold text-[15px] hover:bg-brand-50 transition-all hover:shadow-lg hover:-translate-y-0.5">
+            进入在线演示
+          </a>
+          <a href="#features" class="px-6 py-3 rounded-xl border border-white/25 text-white/90 font-medium text-[15px] hover:bg-white/[0.1] transition-colors">
+            查看核心能力 ↓
+          </a>
+        </div>
+      </div>
+
+      <!-- 右：产品界面预演卡（浮动动效） -->
+      <div class="lg:col-span-6 lg:pl-6">
+        <div class="relative floaty">
+          <!-- 主卡：瞬时风控体检 -->
+          <div class="relative bg-white rounded-2xl shadow-2xl border border-black/5 p-5 md:p-6">
+            <div class="flex items-center gap-2 text-[12px] text-slate-400 mb-4">
+              <span class="w-2 h-2 rounded-full bg-rose-400"></span><span class="w-2 h-2 rounded-full bg-amber-400"></span><span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span class="ml-2">瞬时风控工作台</span>
+            </div>
+            <div class="text-[13px] text-slate-500 mb-2">用一句话描述你的用工情形</div>
+            <div class="rounded-xl bg-slate-100 border border-slate-200 px-4 py-3 text-[14px] text-slate-700 mb-4">
+              “试用期员工考核不合格，想直接解除，需要注意什么？”
+            </div>
+            <div class="flex items-start gap-3 rounded-xl border border-rose-200 bg-rose-50 p-4">
+              <span class="flex-none px-2 py-0.5 rounded-md bg-rose-600 text-white text-[11px] font-semibold">高风险</span>
+              <div class="text-[13px] leading-snug text-rose-800">
+                试用期以“不符合录用条件”解除，举证风险高——录用条件未书面告知并签收的，多数裁判认定为违法解除。
+              </div>
+            </div>
+            <div class="grid grid-cols-3 gap-3 mt-4 text-center">
+              <div class="rounded-xl bg-brand-50 py-2.5"><div class="text-[18px] font-bold text-brand-700">1.8<span class="text-[11px] font-medium"> 秒</span></div><div class="text-[11px] text-slate-500 mt-0.5">AI 首次响应</div></div>
+              <div class="rounded-xl bg-emerald-50 py-2.5"><div class="text-[18px] font-bold text-emerald-700">82.4<span class="text-[11px] font-medium">%</span></div><div class="text-[11px] text-slate-500 mt-0.5">AI 自主解决</div></div>
+              <div class="rounded-xl bg-violet-50 py-2.5"><div class="text-[18px] font-bold text-violet-700">512<span class="text-[11px] font-medium"> 城</span></div><div class="text-[11px] text-slate-500 mt-0.5">属地政策库</div></div>
+            </div>
+          </div>
+          <!-- 浮动小卡：专家直达 -->
+          <div class="absolute -bottom-7 -left-3 md:-left-8 bg-white rounded-xl shadow-xl border border-black/5 px-4 py-3 flex items-center gap-3 floaty floaty-late hidden sm:flex">
+            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-violet-400 to-violet-600 text-white text-[12px] font-semibold flex items-center justify-center">张</div>
+            <div class="leading-tight">
+              <div class="text-[13px] font-semibold text-ink">已分派 · 张律师</div>
+              <div class="text-[11px] text-slate-500">劳动争议 · 30 分钟内响应</div>
+            </div>
+            <span class="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 text-[10px] font-semibold">接单</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero 底部：数据亮点（数字滚动） -->
+    <div id="hero-stats" class="mt-16 md:mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 border-t border-white/[0.14] pt-8">
+      <div class="stat"><div class="stat-num"><span class="count-up" data-target="512">0</span><span class="stat-unit">城</span></div><div class="stat-label">属地政策差异库</div></div>
+      <div class="stat"><div class="stat-num"><span class="count-up" data-target="60">0</span><span class="stat-unit">篇</span></div><div class="stat-label">类案裁判智库</div></div>
+      <div class="stat"><div class="stat-num"><span class="count-up" data-target="30">0</span><span class="stat-unit">分钟</span></div><div class="stat-label">专家响应承诺</div></div>
+      <div class="stat"><div class="stat-num"><span class="count-up" data-target="91.2" data-decimals="1">0</span><span class="stat-unit">%</span></div><div class="stat-label">输出准确率（自测）</div></div>
+    </div>
+  </div>
+
+  <!-- Hero 底缘渐隐到白 -->
+  <div class="absolute bottom-0 inset-x-0 h-14 bg-gradient-to-b from-transparent to-white/0 pointer-events-none" style="mask-image:linear-gradient(to bottom, transparent, black)"></div>
+</section>
+
+<!-- ============================================================
+     ③ 核心能力：六大模块 · 交替布局 + 内嵌可交互 mini demo
+     ============================================================ -->
+<section id="features" class="py-20 md:py-28">
+  <div class="max-w-6xl mx-auto px-4 md:px-6">
+
+    <!-- 区块标题 -->
+    <div class="max-w-2xl mb-14 md:mb-20 reveal">
+      <div class="text-brand-600 font-semibold tracking-wider text-[13px] mb-2">CORE CAPABILITIES</div>
+      <h2 class="text-[26px] md:text-[34px] font-bold tracking-tight">六步闭环，每一步都在现场</h2>
+      <p class="mt-3 text-[15px] text-slate-500 leading-relaxed">从一句话体检到律师签发报告，所有模块共用同一套事实底座——下面的演示都可以直接操作。</p>
+    </div>
+
+    <!-- 模块 1：瞬时风控工作台（左文右 demo） -->
+    <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center mb-20 md:mb-28">
+      <div class="reveal">
+        <div class="sec-tag">01 · 瞬时风控</div>
+        <h3 class="text-[22px] md:text-[27px] font-bold leading-snug mt-2">一句话体检，风险秒级现形</h3>
+        <p class="mt-4 text-[15px] text-slate-500 leading-relaxed">无需表单、无需法条检索。HR 用日常语言描述情形，系统自动命中风险规则，给出等级、成因与整改动作——高价值需求同时直连专家。</p>
+        <ul class="mt-5 space-y-2.5 text-[14px] text-slate-600">
+          <li class="flex gap-2.5"><span class="text-brand-500 font-bold">✓</span>风险等级 + 疑似成因逐条列出</li>
+          <li class="flex gap-2.5"><span class="text-brand-500 font-bold">✓</span>整改动作可执行、可勾选</li>
+          <li class="flex gap-2.5"><span class="text-brand-500 font-bold">✓</span>平均响应 1.8 秒</li>
+        </ul>
+      </div>
+      <div class="reveal demo-panel">
+        <div class="demo-head">试一试：输入情形，点「立即体检」</div>
+        <div class="demo-body">
+          <div class="flex gap-2">
+            <input id="mini-risk-input" class="flex-1 min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-[14px] focus:outline-none focus:ring-2 focus:ring-brand-200 focus:border-brand-300" value="试用期员工考核不合格，想直接解除" />
+            <button id="mini-risk-btn" class="flex-none px-4 py-2.5 rounded-xl bg-brand-600 text-white text-[14px] font-medium hover:bg-brand-700 active:scale-[0.97] transition">立即体检</button>
+          </div>
+          <div id="mini-risk-out" class="mt-4 space-y-3"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 模块 2：智能法规查询（右文左 demo） -->
+    <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center mb-20 md:mb-28">
+      <div class="reveal demo-panel lg:order-1 order-2">
+        <div class="demo-head">属地口径比对：同一问题，两城答案</div>
+        <div class="demo-body">
+          <div class="flex gap-1 mb-4" id="mini-law-tabs"></div>
+          <div id="mini-law-out"></div>
+        </div>
+      </div>
+      <div class="reveal lg:order-2 order-1">
+        <div class="sec-tag">02 · 法规查询</div>
+        <h3 class="text-[22px] md:text-[27px] font-bold leading-snug mt-2">512 城属地口径，差异一眼看穿</h3>
+        <p class="mt-4 text-[15px] text-slate-500 leading-relaxed">同一道加班费题，广州与上海的裁审口径并不相同。系统按属地自动切换适用规则，标注“更严格”的城市与胜诉率倾向，避免拿 A 城的答案处理 B 城的问题。</p>
+        <ul class="mt-5 space-y-2.5 text-[14px] text-slate-600">
+          <li class="flex gap-2.5"><span class="text-brand-500 font-bold">✓</span>城市拼音 / 省份双通道检索</li>
+          <li class="flex gap-2.5"><span class="text-brand-500 font-bold">✓</span>口径差异点 + 胜诉率参考</li>
+          <li class="flex gap-2.5"><span class="text-brand-500 font-bold">✓</span>落地操作清单勾选式核对</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 模块 3：类案检索智库（左文右 demo） -->
+    <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center mb-20 md:mb-28">
+      <div class="reveal">
+        <div class="sec-tag">03 · 类案检索</div>
+        <h3 class="text-[22px] md:text-[27px] font-bold leading-snug mt-2">裁判倾向，用数据说话</h3>
+        <p class="mt-4 text-[15px] text-slate-500 leading-relaxed">结构化拆解真实裁判文书：争议焦点、举证要点、裁判倾向占比、涉案金额区间。预判走到仲裁那一刻，你先知道大概率结果。</p>
+        <ul class="mt-5 space-y-2.5 text-[14px] text-slate-600">
+          <li class="flex gap-2.5"><span class="text-brand-500 font-bold">✓</span>6 大类案专题 · 1,286 篇语料</li>
+          <li class="flex gap-2.5"><span class="text-brand-500 font-bold">✓</span>劳动者胜诉倾向预判</li>
+          <li class="flex gap-2.5"><span class="text-brand-500 font-bold">✓</span>一键引用进分析报告</li>
+        </ul>
+      </div>
+      <div class="reveal demo-panel">
+        <div class="demo-head">点击案例卡，展开裁判要点</div>
+        <div class="demo-body">
+          <div id="mini-case-tendency" class="mb-4"></div>
+          <div id="mini-case-list" class="space-y-3"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 模块 4：7×24 智能咨询（右文左 demo） -->
+    <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center mb-20 md:mb-28">
+      <div class="reveal demo-panel lg:order-1 order-2">
+        <div class="demo-head">点下方快捷问题，看 AI 怎么答</div>
+        <div class="demo-body">
+          <div id="mini-chat-log" class="space-y-3 min-h-[120px]"></div>
+          <div id="mini-chat-quick" class="flex flex-wrap gap-2 mt-4"></div>
+        </div>
+      </div>
+      <div class="reveal lg:order-2 order-1">
+        <div class="sec-tag">04 · 智能咨询</div>
+        <h3 class="text-[22px] md:text-[27px] font-bold leading-snug mt-2">凌晨两点也有专业答案</h3>
+        <p class="mt-4 text-[15px] text-slate-500 leading-relaxed">AI 逐条标注法条依据与置信度；置信度不足 85% 自动转人工，高危情形强制专家复核——不是“敢不敢答”，而是“该不该答”。</p>
+        <ul class="mt-5 space-y-2.5 text-[14px] text-slate-600">
+          <li class="flex gap-2.5"><span class="text-brand-500 font-bold">✓</span>答案附带法条依据与置信度</li>
+          <li class="flex gap-2.5"><span class="text-brand-500 font-bold">✓</span>复杂需求自动识别并分流专家</li>
+          <li class="flex gap-2.5"><span class="text-brand-500 font-bold">✓</span>82.4% 咨询 AI 直接闭环</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 模块 5：一键生成报告（左文右 demo） -->
+    <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center mb-20 md:mb-28">
+      <div class="reveal">
+        <div class="sec-tag">05 · 报告生成</div>
+        <h3 class="text-[22px] md:text-[27px] font-bold leading-snug mt-2">从咨询记录到交付级报告</h3>
+        <p class="mt-4 text-[15px] text-slate-500 leading-relaxed">引用过的法条、类案、属地指引自动汇入报告。风险评估、合规体检、争议应对三类模板，进度条走完即出完整纸面——对外交付前须执业律师复核签发。</p>
+        <ul class="mt-5 space-y-2.5 text-[14px] text-slate-600">
+          <li class="flex gap-2.5"><span class="text-brand-500 font-bold">✓</span>咨询-法规-类案证据链自动沉淀</li>
+          <li class="flex gap-2.5"><span class="text-brand-500 font-bold">✓</span>打印 / 导出双通道</li>
+          <li class="flex gap-2.5"><span class="text-brand-500 font-bold">✓</span>全流程律师签发管控</li>
+        </ul>
+      </div>
+      <div class="reveal demo-panel">
+        <div class="demo-head">点「生成报告」，看证据如何汇成纸面</div>
+        <div class="demo-body">
+          <div class="flex items-center gap-3 mb-4">
+            <button id="mini-report-btn" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-[13px] font-medium hover:bg-brand-700 active:scale-[0.97] transition">生成报告</button>
+            <div class="flex-1 h-2 rounded-full bg-slate-100 overflow-hidden">
+              <div id="mini-report-bar" class="h-full w-0 bg-gradient-to-r from-brand-400 to-brand-600 transition-all duration-300"></div>
+            </div>
+            <span id="mini-report-pct" class="text-[12px] text-slate-400 tabular-nums w-10 text-right">0%</span>
+          </div>
+          <div id="mini-report-out"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 模块 6：专家直达（右文左 demo） -->
+    <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <div class="reveal demo-panel lg:order-1 order-2">
+        <div class="demo-head">专家库 · 按领域 / 属地 / 负荷智能派单</div>
+        <div class="demo-body">
+          <div id="mini-expert-list" class="grid grid-cols-2 gap-3"></div>
+          <div id="mini-flow" class="mt-5 pt-5 border-t border-dashed border-slate-200"></div>
+        </div>
+      </div>
+      <div class="reveal lg:order-2 order-1">
+        <div class="sec-tag">06 · 专家直达</div>
+        <h3 class="text-[22px] md:text-[27px] font-bold leading-snug mt-2">AI 解决不了的，人 30 分钟接手</h3>
+        <p class="mt-4 text-[15px] text-slate-500 leading-relaxed">8 位领域专家组成服务池，按专业领域、属地、当前负荷三重维度自动派单。服务过程节点可视化，成果归档反哺知识库——专家的每一次交付，都让 AI 更聪明。</p>
+        <ul class="mt-5 space-y-2.5 text-[14px] text-slate-600">
+          <li class="flex gap-2.5"><span class="text-brand-500 font-bold">✓</span>领域 / 属地 / 负荷三维派单</li>
+          <li class="flex gap-2.5"><span class="text-brand-500 font-bold">✓</span>服务节点全程可查</li>
+          <li class="flex gap-2.5"><span class="text-brand-500 font-bold">✓</span>交付归档反哺 AI 迭代</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ④ 三道防线：AI 安全护栏
+     ============================================================ -->
+<section id="guardrails" class="py-20 md:py-24 bg-[#f6f8fc]">
+  <div class="max-w-6xl mx-auto px-4 md:px-6">
+    <div class="max-w-2xl mb-12 reveal">
+      <div class="text-brand-600 font-semibold tracking-wider text-[13px] mb-2">HUMAN IN THE LOOP</div>
+      <h2 class="text-[26px] md:text-[34px] font-bold tracking-tight">AI 很快，但最后签字的是律师</h2>
+      <p class="mt-3 text-[15px] text-slate-500 leading-relaxed">三道强制人工审核防线，确保每一条对外结论都经得起检验。</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-5" id="guard-list"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ⑤ 评测指标与可复用资产
+     ============================================================ -->
+<section id="metrics" class="py-20 md:py-24">
+  <div class="max-w-6xl mx-auto px-4 md:px-6">
+    <div class="max-w-2xl mb-12 reveal">
+      <div class="text-brand-600 font-semibold tracking-wider text-[13px] mb-2">MEASURED, NOT PROMISED</div>
+      <h2 class="text-[26px] md:text-[34px] font-bold tracking-tight">指标实测达标，资产持续沉淀</h2>
+    </div>
+    <div class="grid md:grid-cols-4 gap-4 mb-10" id="metric-list"></div>
+    <div class="grid md:grid-cols-2 gap-4" id="skill-list"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ⑥ 里程碑：12 周孵化节奏
+     ============================================================ -->
+<section id="milestones" class="py-20 md:py-24 bg-[#f6f8fc]">
+  <div class="max-w-6xl mx-auto px-4 md:px-6">
+    <div class="max-w-2xl mb-12 reveal">
+      <div class="text-brand-600 font-semibold tracking-wider text-[13px] mb-2">ROADMAP</div>
+      <h2 class="text-[26px] md:text-[34px] font-bold tracking-tight">12 周，从立项卡到终审</h2>
+    </div>
+    <div id="milestone-list" class="grid md:grid-cols-3 lg:grid-cols-6 gap-4"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ⑦ 尾部 CTA
+     ============================================================ -->
+<section class="relative overflow-hidden bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700 text-white py-20 md:py-24">
+  <div class="pointer-events-none absolute inset-0 opacity-30" style="background:radial-gradient(500px 260px at 80% 20%, rgba(95,139,240,.4), transparent 60%)"></div>
+  <div class="relative max-w-3xl mx-auto px-4 text-center reveal">
+    <h2 class="text-[28px] md:text-[36px] font-bold tracking-tight">端到端演示，现场可跑</h2>
+    <p class="mt-4 text-[15px] text-white/65 leading-relaxed">工作台一句话体检 → 法规 / 类案佐证 → 智能咨询追问 → 专家智能分流 → 一键生成报告。每一步都是真实交互，不是录屏。</p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a href="demo.html" class="px-7 py-3.5 rounded-xl bg-white text-brand-800 font-semibold text-[15px] hover:bg-brand-50 transition-all hover:shadow-lg hover:-translate-y-0.5">进入在线演示 →</a>
+      <a href="#top" class="px-7 py-3.5 rounded-xl border border-white/25 text-white/90 font-medium text-[15px] hover:bg-white/[0.1] transition-colors">回到顶部</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ⑧ 页脚
+     ============================================================ -->
+<footer class="py-8 border-t border-[#e5e8f0]">
+  <div class="max-w-6xl mx-auto px-4 md:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[12.5px] text-slate-400">
+    <div>外服法务通 LawLink · 上海外服广东公司「智法先锋」团队 · 赛博革新组</div>
+    <div>AI 输出仅作辅助参考 · 对外交付结论须执业律师复核签发</div>
+  </div>
+</footer>
+
+<!-- 交互脚本：数据由 data.js 提供（与后台演示共用同一事实底座） -->
+<script src="js/data.js"></script>
+<script src="js/landing.js"></script>
+</body>
+</html>

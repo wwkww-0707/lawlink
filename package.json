@@ -1,0 +1,13 @@
+{
+  "name": "lawlink-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "外服法务通 LawLink —— 前后端一体部署包（零依赖 Node 静态服务器 + 前端生产构建）",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}
